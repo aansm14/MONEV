@@ -29,8 +29,8 @@ export const UserManagementView: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
-  // Form states
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState<Role>('monev');
   const [phone, setPhone] = useState('');
@@ -61,6 +61,7 @@ export const UserManagementView: React.FC = () => {
   const openAddUser = () => {
     setEditingUser(null);
     setUsername('');
+    setPassword('koni2027');
     setName('');
     setRole('monev');
     setPhone('0812xxxxxxxx');
@@ -73,6 +74,7 @@ export const UserManagementView: React.FC = () => {
   const openEditUser = (u: User) => {
     setEditingUser(u);
     setUsername(u.username);
+    setPassword(u.password || 'koni2027');
     setName(u.name);
     setRole(u.role);
     setPhone(u.phone);
@@ -93,6 +95,7 @@ export const UserManagementView: React.FC = () => {
 
     const userData: Omit<User, 'id'> = {
       username: username.trim().toLowerCase(),
+      password: password.trim() || 'koni2027',
       name,
       role,
       phone,
@@ -172,8 +175,8 @@ export const UserManagementView: React.FC = () => {
                   
                   <td className="py-3.5 px-4">
                     <div className="font-bold text-slate-900 text-sm">{u.name}</div>
-                    <div className="text-[10px] text-slate-400 font-mono">
-                      Username: @{u.username}
+                    <div className="text-[10px] text-slate-500 font-mono">
+                      User: @{u.username} · Pass: <span className="font-semibold text-slate-700 bg-slate-100 px-1 rounded">{u.password}</span>
                     </div>
                   </td>
 
@@ -293,17 +296,29 @@ export const UserManagementView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold mb-1">Peran Hak Akses *</label>
-                  <select
-                    value={role}
-                    onChange={(e: any) => setRole(e.target.value)}
-                    className="w-full border rounded-lg p-2 bg-white font-semibold"
-                  >
-                    <option value="admin">Admin Utama Bapel</option>
-                    <option value="monev">Tim Monev Bapel</option>
-                    <option value="cabor">Pengurus / Pelatih Cabor</option>
-                  </select>
+                  <label className="block font-semibold mb-1">Kata Sandi / Password *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Minimal 6 karakter"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full border rounded-lg p-2 font-mono"
+                  />
                 </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1">Peran Hak Akses *</label>
+                <select
+                  value={role}
+                  onChange={(e: any) => setRole(e.target.value)}
+                  className="w-full border rounded-lg p-2 bg-white font-semibold"
+                >
+                  <option value="admin">Admin Utama Bapel</option>
+                  <option value="monev">Tim Monev Bapel</option>
+                  <option value="cabor">Pengurus / Pelatih Cabor</option>
+                </select>
               </div>
 
               <div>

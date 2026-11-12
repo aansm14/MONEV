@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Award, 
-  Bell, 
   LogOut, 
-  ChevronDown, 
   Shield, 
   Activity, 
   Users, 
@@ -21,8 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleMobileMenu, 
   onOpenMedicalAlerts 
 }) => {
-  const { currentUser, logout, switchUser, users, medicalAlertCount } = useApp();
-  const [showSwitchDropdown, setShowSwitchDropdown] = useState(false);
+  const { currentUser, logout, medicalAlertCount } = useApp();
 
   if (!currentUser) return null;
 
@@ -94,76 +91,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
 
-            {/* Quick Switch Dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowSwitchDropdown(!showSwitchDropdown)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-left transition-colors"
-              >
-                <div className="w-6 h-6 rounded bg-slate-700 flex items-center justify-center text-xs font-bold text-amber-400 shrink-0">
-                  {currentUser.role === 'admin' ? (
-                    <Shield className="w-3.5 h-3.5" />
-                  ) : currentUser.role === 'monev' ? (
-                    <Activity className="w-3.5 h-3.5 text-sky-400" />
-                  ) : (
-                    <Users className="w-3.5 h-3.5 text-emerald-400" />
-                  )}
+            {/* User Profile Badge */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
+              <div className="w-6 h-6 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-bold text-amber-400 shrink-0">
+                {currentUser.role === 'admin' ? (
+                  <Shield className="w-3.5 h-3.5" />
+                ) : currentUser.role === 'monev' ? (
+                  <Activity className="w-3.5 h-3.5 text-sky-400" />
+                ) : (
+                  <Users className="w-3.5 h-3.5 text-emerald-400" />
+                )}
+              </div>
+              <div className="hidden sm:block text-left">
+                <div className="text-xs font-semibold text-white leading-tight truncate max-w-[130px]">
+                  {currentUser.name.split(',')[0]}
                 </div>
-                <div className="hidden sm:block text-left">
-                  <div className="text-xs font-semibold text-white leading-tight truncate max-w-[120px]">
-                    {currentUser.name.split(',')[0]}
-                  </div>
-                  <div className="text-[10px] text-amber-400 font-mono leading-none capitalize">
-                    {currentUser.role === 'admin' 
-                      ? 'Admin Bapel' 
-                      : currentUser.role === 'monev' 
-                      ? 'Tim Monev' 
-                      : 'Pengurus Cabor'}
-                  </div>
+                <div className="text-[10px] text-amber-400 font-mono leading-none capitalize">
+                  {currentUser.role === 'admin' 
+                    ? 'Admin Bapel' 
+                    : currentUser.role === 'monev' 
+                    ? 'Tim Monev' 
+                    : 'Pengurus Cabor'}
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-
-              {showSwitchDropdown && (
-                <div 
-                  className="absolute right-0 mt-2 w-64 rounded-xl bg-slate-800 border border-slate-700 shadow-2xl py-2 z-50 focus:outline-none"
-                  onMouseLeave={() => setShowSwitchDropdown(false)}
-                >
-                  <div className="px-3 py-1.5 border-b border-slate-700/70 mb-1">
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                      Ganti Akun Cepat (Testing)
-                    </p>
-                  </div>
-                  <div className="max-h-72 overflow-y-auto divide-y divide-slate-700/40">
-                    {users.map((u) => (
-                      <button
-                        key={u.id}
-                        type="button"
-                        onClick={() => {
-                          switchUser(u.id);
-                          setShowSwitchDropdown(false);
-                        }}
-                        className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-700/60 transition-colors ${
-                          u.id === currentUser.id ? 'bg-amber-500/10 text-amber-300 font-semibold' : 'text-slate-300'
-                        }`}
-                      >
-                        <div className="min-w-0 pr-2">
-                          <p className="truncate font-medium">{u.name}</p>
-                          <p className="text-[10px] text-slate-400 capitalize">
-                            {u.role} · @{u.username}
-                          </p>
-                        </div>
-                        {u.id === currentUser.id && (
-                          <span className="text-[10px] bg-amber-400/20 text-amber-300 px-1.5 py-0.5 rounded shrink-0">
-                            Aktif
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
 
             {/* Logout button */}

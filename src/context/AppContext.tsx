@@ -33,9 +33,8 @@ interface AppContextType {
   laporanMonevList: LaporanMonev[];
   
   // Auth methods
-  login: (username: string) => boolean;
+  login: (username: string, password: string) => { success: boolean; message?: string };
   logout: () => void;
-  switchUser: (userId: string) => void;
   
   // Role helpers
   isAdmin: boolean;
@@ -102,7 +101,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Load or fallback to initial data
   const [users, setUsers] = useState<User[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.USERS);
-    return saved ? JSON.parse(saved) : INITIAL_USERS;
+    if (saved) {
+      try {
+        const parsed: User[] = JSON.parse(saved);
+        return parsed.map((u) => {
+          if (!u.password) {
+            const init = INITIAL_USERS.find((initU) => initU.username === u.username);
+            return { ...u, password: init ? init.password : 'koni2027' };
+          }
+          return u;
+        });
+      } catch {
+        return INITIAL_USERS;
+      }
+    }
+    return INITIAL_USERS;
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -194,24 +207,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [laporanMonevList]);
 
   // Auth methods
-  const login = (username: string): boolean => {
-    const found = users.find((u) => u.username.toLowerCase() === username.trim().toLowerCase());
-    if (found) {
-      setCurrentUser(found);
-      return true;
+  const login = (username: string, password: string): { success: boolean; message?: string } => {
+    const trimmedUsername = username.trim().toLowerCase();
+    const found = users.find((u) => u.username.toLowerCase() === trimmedUsername);
+    if (!found) {
+      return { success: false, message: `Username "${username}" tidak terdaftar dalam sistem Puslatkab.` };
     }
-    return false;
+    if (found.password !== password) {
+      return { success: false, message: 'Password / Kata sandi tidak cocok. Silakan coba lagi.' };
+    }
+    setCurrentUser(found);
+    return { success: true };
   };
 
   const logout = () => {
     setCurrentUser(null);
-  };
-
-  const switchUser = (userId: string) => {
-    const found = users.find((u) => u.id === userId);
-    if (found) {
-      setCurrentUser(found);
-    }
   };
 
   const isAdmin = currentUser?.role === 'admin';
@@ -414,7 +424,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         laporanMonevList,
         login,
         logout,
-        switchUser,
         isAdmin,
         isMonev,
         isCabor,

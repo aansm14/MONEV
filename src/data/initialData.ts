@@ -18,6 +18,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-admin-1',
     username: 'admin',
+    password: 'admin2027',
     name: 'Drs. H. M. Taufiqurrahman, M.Si',
     role: 'admin',
     phone: '081234567890',
@@ -26,6 +27,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-monev-1',
     username: 'monev1',
+    password: 'monev2027',
     name: 'Drs. Bambang Wijaya, M.Pd',
     role: 'monev',
     assignedCaborIds: ['cabor-bulutangkis', 'cabor-panahan'],
@@ -35,6 +37,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-monev-2',
     username: 'monev2',
+    password: 'monev2027',
     name: 'Aris Prasetyo, S.Or, M.Fis',
     role: 'monev',
     assignedCaborIds: ['cabor-angkat-besi', 'cabor-atletik'],
@@ -44,6 +47,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-cabor-1',
     username: 'angkatbesi',
+    password: 'pabsi2027',
     name: 'M. Subeki, S.Pd (PABSI)',
     role: 'cabor',
     caborId: 'cabor-angkat-besi',
@@ -53,6 +57,7 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-cabor-2',
     username: 'bulutangkis',
+    password: 'pbsi2027',
     name: 'Hendra Setiawan, S.Pd (PBSI)',
     role: 'cabor',
     caborId: 'cabor-bulutangkis',
@@ -62,11 +67,32 @@ export const INITIAL_USERS: User[] = [
   {
     id: 'usr-cabor-3',
     username: 'atletik',
+    password: 'pasi2027',
     name: 'Dian Wahyudi, S.Or (PASI)',
     role: 'cabor',
     caborId: 'cabor-atletik',
     phone: '081377889900',
     jabatan: 'Pelatih Kepala Lintasan PASI Sidoarjo',
+  },
+  {
+    id: 'usr-cabor-4',
+    username: 'panahan',
+    password: 'perpani2027',
+    name: 'Siti Rohimah, S.Pd (PERPANI)',
+    role: 'cabor',
+    caborId: 'cabor-panahan',
+    phone: '081234991122',
+    jabatan: 'Pelatih Kepala Panahan Puslatkab',
+  },
+  {
+    id: 'usr-cabor-5',
+    username: 'renang',
+    password: 'aquatik2027',
+    name: 'Agus Santoso, M.Pd (AQUATIK)',
+    role: 'cabor',
+    caborId: 'cabor-renang',
+    phone: '081322334455',
+    jabatan: 'Pelatih Kepala Renang Sidoarjo',
   },
 ];
 
