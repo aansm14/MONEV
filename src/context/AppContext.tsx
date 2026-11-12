@@ -388,18 +388,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const medicalAlertCount = criticalAthletes.length;
 
   const resetToDefaultData = () => {
-    if (window.confirm('Reset database ke data awal standar Bapel Puslatkab KONI Sidoarjo?')) {
-      setUsers(INITIAL_USERS);
-      setCabors(INITIAL_CABORS);
-      setNomorPertandingan(INITIAL_NOMOR_PERTANDINGAN);
-      setPelatihList(INITIAL_PELATIH);
-      setParameters(INITIAL_PARAMETERS);
-      setAtlets(INITIAL_ATLETS);
-      setSesiTesList(INITIAL_SESI_TES);
-      setLaporanMonevList(INITIAL_LAPORAN_MONEV);
-      localStorage.clear();
-      window.location.reload();
-    }
+    setUsers(INITIAL_USERS);
+    setCabors(INITIAL_CABORS);
+    setNomorPertandingan(INITIAL_NOMOR_PERTANDINGAN);
+    setPelatihList(INITIAL_PELATIH);
+    setParameters(INITIAL_PARAMETERS);
+    setAtlets(INITIAL_ATLETS);
+    setSesiTesList(INITIAL_SESI_TES);
+    setLaporanMonevList(INITIAL_LAPORAN_MONEV);
+    localStorage.clear();
+    window.location.reload();
   };
 
   return (

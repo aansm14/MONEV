@@ -654,11 +654,7 @@ export const PhysicalTestView: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(`Hapus parameter "${param.namaParameter}"?`)) {
-                          deleteParameter(param.id);
-                        }
-                      }}
+                      onClick={() => deleteParameter(param.id)}
                       className="p-1.5 text-slate-500 hover:text-rose-600 rounded-lg hover:bg-slate-200"
                     >
                       <Trash2 className="w-4 h-4" />

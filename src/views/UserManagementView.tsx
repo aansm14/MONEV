@@ -250,11 +250,7 @@ export const UserManagementView: React.FC = () => {
                       {u.id !== currentUser?.id && (
                         <button
                           type="button"
-                          onClick={() => {
-                            if (window.confirm(`Hapus akun "${u.name}" (@${u.username})?`)) {
-                              deleteUser(u.id);
-                            }
-                          }}
+                          onClick={() => deleteUser(u.id)}
                           className="p-1.5 text-slate-500 hover:text-rose-600 rounded-lg hover:bg-slate-100"
                           title="Hapus Akun"
                         >

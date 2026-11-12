@@ -198,7 +198,7 @@ export const MonevReportsView: React.FC<MonevReportsViewProps> = ({
     e.preventDefault();
     const currentCabor = accessibleCabors.find((c) => c.id === caborId) || accessibleCabors[0];
     if (!currentCabor) {
-      alert('Silakan pilih cabang olahraga terlebih dahulu.');
+      setPhotoError('Silakan pilih cabang olahraga terlebih dahulu.');
       return;
     }
 

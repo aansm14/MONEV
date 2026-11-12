@@ -455,11 +455,7 @@ export const CaborManagementView: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(`Hapus nomor "${nomor.namaNomor}"?`)) {
-                          deleteNomorPertandingan(nomor.id);
-                        }
-                      }}
+                      onClick={() => deleteNomorPertandingan(nomor.id)}
                       className="p-1.5 text-slate-500 hover:text-rose-600 rounded-lg hover:bg-slate-100"
                       title="Hapus Nomor"
                     >
@@ -530,11 +526,7 @@ export const CaborManagementView: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(`Hapus data pelatih "${pelatih.nama}"?`)) {
-                          deletePelatih(pelatih.id);
-                        }
-                      }}
+                      onClick={() => deletePelatih(pelatih.id)}
                       className="p-1.5 text-slate-500 hover:text-rose-600 rounded-lg hover:bg-slate-200"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
