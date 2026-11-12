@@ -8,7 +8,8 @@ import {
   ParameterFisik, 
   SesiTesFisik, 
   LaporanMonev, 
-  ConditionStatus 
+  ConditionStatus,
+  KopSuratConfig
 } from '../types';
 import { 
   INITIAL_USERS, 
@@ -48,8 +49,9 @@ interface AppContextType {
   updateUser: (id: string, user: Partial<User>) => void;
   deleteUser: (id: string) => void;
   
-  addCabor: (cabor: Omit<Cabor, 'id'>) => void;
+  addCabor: (cabor: Omit<Cabor, 'id'>) => Cabor;
   updateCabor: (id: string, cabor: Partial<Cabor>) => void;
+  deleteCabor: (id: string) => void;
   
   addNomorPertandingan: (nomor: Omit<NomorPertandingan, 'id'>) => void;
   updateNomorPertandingan: (id: string, nomor: Partial<NomorPertandingan>) => void;
@@ -75,6 +77,11 @@ interface AppContextType {
   addLaporanMonev: (laporan: Omit<LaporanMonev, 'id' | 'createdAt'>) => void;
   updateLaporanMonev: (id: string, laporan: Partial<LaporanMonev>) => void;
 
+  // Kop Surat & Logo Configuration
+  kopConfig: KopSuratConfig;
+  updateKopConfig: (newConfig: Partial<KopSuratConfig>) => void;
+  resetKopConfig: () => void;
+
   // Medical Alert queries
   criticalAthletes: Atlet[];
   medicalAlertCount: number;
@@ -95,6 +102,19 @@ const STORAGE_KEYS = {
   ATLETS: 'koni_sidoarjo_atlets_v1',
   SESI_TES: 'koni_sidoarjo_sesi_tes_v1',
   LAPORAN: 'koni_sidoarjo_laporan_monev_v1',
+  KOP_CONFIG: 'koni_sidoarjo_kop_config_v1',
+};
+
+export const DEFAULT_KOP_CONFIG: KopSuratConfig = {
+  logoKoniUrl: '',
+  logoBapelUrl: '',
+  instansiInduk: 'KOMITE OLAHRAGA NASIONAL INDONESIA (KONI)',
+  kabupatenKota: 'KABUPATEN SIDOARJO',
+  namaBadan: 'BADAN PELAKSANA (BAPEL) PUSLATKAB PORPROV JATIM IX 2027',
+  alamat: 'Sekretariat: Kompleks GOR Gelora Delta Sidoarjo, Jl. Pahlawan No. 1, Sidoarjo 61212',
+  kontak: 'Email: bapel.puslatkab2027@konisidoarjo.or.id · Website: puslatkab.konisidoarjo.or.id',
+  namaKetuaBapel: 'Drs. H. M. Taufiqurrahman, M.Si',
+  jabatanKetuaBapel: 'Ketua Badan Pelaksana (BAPEL) Puslatkab KONI Sidoarjo',
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -165,7 +185,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_LAPORAN_MONEV;
   });
 
+  const [kopConfig, setKopConfig] = useState<KopSuratConfig>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.KOP_CONFIG);
+    if (saved) {
+      try {
+        return { ...DEFAULT_KOP_CONFIG, ...JSON.parse(saved) };
+      } catch {
+        return DEFAULT_KOP_CONFIG;
+      }
+    }
+    return DEFAULT_KOP_CONFIG;
+  });
+
   // Sync state to LocalStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.KOP_CONFIG, JSON.stringify(kopConfig));
+  }, [kopConfig]);
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
   }, [users]);
@@ -266,13 +301,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  const addCabor = (newCabor: Omit<Cabor, 'id'>) => {
+  const addCabor = (newCabor: Omit<Cabor, 'id'>): Cabor => {
     const id = `cabor-${Date.now()}`;
-    setCabors((prev) => [...prev, { ...newCabor, id }]);
+    const created: Cabor = { ...newCabor, id };
+    setCabors((prev) => [...prev, created]);
+
+    // If current logged in user is a Monev team member, automatically attach this new cabor to their scope
+    if (currentUser?.role === 'monev') {
+      const assigned = currentUser.assignedCaborIds || [];
+      if (!assigned.includes(id)) {
+        const updatedAssigned = [...assigned, id];
+        updateUser(currentUser.id, { assignedCaborIds: updatedAssigned });
+      }
+    }
+
+    return created;
   };
 
   const updateCabor = (id: string, updated: Partial<Cabor>) => {
     setCabors((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)));
+  };
+
+  const deleteCabor = (id: string) => {
+    setCabors((prev) => prev.filter((c) => c.id !== id));
+    setNomorPertandingan((prev) => prev.filter((n) => n.caborId !== id));
+    setPelatihList((prev) => prev.filter((p) => p.caborId !== id));
+    setAtlets((prev) => prev.filter((a) => a.caborId !== id));
+    setParameters((prev) => prev.filter((p) => p.caborId !== id));
+    setSesiTesList((prev) => prev.filter((s) => s.caborId !== id));
+    setLaporanMonevList((prev) => prev.filter((l) => l.caborId !== id));
   };
 
   const addNomorPertandingan = (nomor: Omit<NomorPertandingan, 'id'>) => {
@@ -397,6 +454,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const medicalAlertCount = criticalAthletes.length;
 
+  const updateKopConfig = (newConfig: Partial<KopSuratConfig>) => {
+    setKopConfig((prev) => ({ ...prev, ...newConfig }));
+  };
+
+  const resetKopConfig = () => {
+    setKopConfig(DEFAULT_KOP_CONFIG);
+  };
+
   const resetToDefaultData = () => {
     setUsers(INITIAL_USERS);
     setCabors(INITIAL_CABORS);
@@ -406,6 +471,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAtlets(INITIAL_ATLETS);
     setSesiTesList(INITIAL_SESI_TES);
     setLaporanMonevList(INITIAL_LAPORAN_MONEV);
+    setKopConfig(DEFAULT_KOP_CONFIG);
     localStorage.clear();
     window.location.reload();
   };
@@ -434,6 +500,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteUser,
         addCabor,
         updateCabor,
+        deleteCabor,
         addNomorPertandingan,
         updateNomorPertandingan,
         deleteNomorPertandingan,
@@ -452,6 +519,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteSesiTes,
         addLaporanMonev,
         updateLaporanMonev,
+        kopConfig,
+        updateKopConfig,
+        resetKopConfig,
         criticalAthletes,
         medicalAlertCount,
         resetToDefaultData,

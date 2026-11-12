@@ -146,3 +146,15 @@ export interface LaporanMonev {
   };
   createdAt: string;
 }
+
+export interface KopSuratConfig {
+  logoKoniUrl: string; // Base64 data URL or empty (falls back to default SVG badge)
+  logoBapelUrl: string; // Base64 data URL or empty (falls back to default SVG badge)
+  instansiInduk: string; // "KOMITE OLAHRAGA NASIONAL INDONESIA (KONI)"
+  kabupatenKota: string; // "KABUPATEN SIDOARJO"
+  namaBadan: string; // "BADAN PELAKSANA (BAPEL) PUSLATKAB PORPROV JATIM IX 2027"
+  alamat: string; // "Kompleks GOR Gelora Delta Sidoarjo, Jl. Pahlawan No. 1, Sidoarjo 61212"
+  kontak: string; // "Email: bapel.puslatkab2027@konisidoarjo.or.id · Website: puslatkab.konisidoarjo.or.id"
+  namaKetuaBapel: string; // "Drs. H. M. Taufiqurrahman, M.Si"
+  jabatanKetuaBapel: string; // "Ketua Badan Pelaksana (BAPEL) Puslatkab KONI Sidoarjo"
+}

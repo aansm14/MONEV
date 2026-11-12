@@ -10,7 +10,8 @@ import {
   UserCog, 
   RefreshCw,
   MapPin,
-  Calendar
+  Calendar,
+  Building2
 } from 'lucide-react';
 
 export type NavTab = 
@@ -20,6 +21,7 @@ export type NavTab =
   | 'athletes'
   | 'physical_tests'
   | 'medical_alerts'
+  | 'kop_settings'
   | 'users';
 
 interface SidebarProps {
@@ -94,6 +96,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badgeColor: 'bg-rose-500 text-white',
       roles: ['admin', 'monev', 'cabor'],
       sublabel: 'Triage Fisioterapi Bapel',
+    },
+    {
+      id: 'kop_settings',
+      label: 'Kop & Logo Laporan',
+      icon: Building2,
+      roles: ['admin', 'monev'],
+      sublabel: 'Ganti Logo KONI & Bapel',
     },
     {
       id: 'users',

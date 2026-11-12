@@ -12,6 +12,7 @@ import { AthletesView } from './views/AthletesView';
 import { PhysicalTestView } from './views/PhysicalTestView';
 import { MedicalAlertsView } from './views/MedicalAlertsView';
 import { UserManagementView } from './views/UserManagementView';
+import { KopSettingsView } from './views/KopSettingsView';
 import { LaporanMonev } from './types';
 
 const MainLayout: React.FC = () => {
@@ -43,7 +44,7 @@ const MainLayout: React.FC = () => {
         onOpenMedicalAlerts={() => setCurrentTab('medical_alerts')}
       />
 
-      <div className="flex-1 flex max-w-7xl w-full mx-auto">
+      <div className="flex-1 flex max-w-7xl w-full mx-auto app-main-body">
         {/* Responsive Sidebar */}
         <Sidebar
           currentTab={currentTab}
@@ -83,6 +84,8 @@ const MainLayout: React.FC = () => {
           {currentTab === 'physical_tests' && <PhysicalTestView />}
 
           {currentTab === 'medical_alerts' && <MedicalAlertsView />}
+
+          {currentTab === 'kop_settings' && <KopSettingsView />}
 
           {currentTab === 'users' && <UserManagementView />}
         </main>

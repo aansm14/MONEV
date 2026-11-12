@@ -11,32 +11,85 @@
 }
 
 @media print {
-  body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    font-size: 11pt !important;
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 15mm 15mm;
   }
-  
-  .no-print {
+
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print,
+  .app-main-body,
+  nav,
+  aside,
+  header {
     display: none !important;
   }
-  
+
   .print-only {
     display: block !important;
   }
-  
+
+  /* Unbind modal from fixed viewport so it flows across multiple pages */
+  .print-modal-overlay {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    width: 100% !important;
+    backdrop-filter: none !important;
+    z-index: auto !important;
+  }
+
   .print-container {
+    position: static !important;
+    display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
-    background: white !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .print-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .print-page-break {
     page-break-before: always;
+    break-before: page;
+  }
+
+  /* Ensure images in documentation fit gracefully without splitting awkwardly */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Ensure text doesn't hide borders */
+  table, tr, td, th {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
